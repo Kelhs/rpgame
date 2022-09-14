@@ -21,8 +21,8 @@ public class Ressources{
     private int maxPossibilities = 3;
     private double randomStuff = Math.floor((Math.random() * maxPossibilities) + 1);
     
-    public Ressources(){
-
+    public Ressources(Loot loot){
+        this.loot = loot;
     }
 
     /**

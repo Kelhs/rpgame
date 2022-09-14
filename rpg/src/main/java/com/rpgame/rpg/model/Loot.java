@@ -94,7 +94,6 @@ public class Loot {
      * @return String return the type
      */
     public String getType(){
-        setType();
         return type;
     }
 

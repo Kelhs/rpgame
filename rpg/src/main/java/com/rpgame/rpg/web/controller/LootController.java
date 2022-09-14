@@ -55,8 +55,9 @@ public class LootController {
     public void createRandomDrop(){
         int luck = getStatsById(1).getLuck();
         Loot loot = new Loot(luck);
-        lootDAO.save(loot);
+        loot.setType();
         String lootType = loot.getType();
+        lootDAO.save(loot);
         if(lootType == "Stuff"){
             Rarity rarity = new Rarity(luck);
             String stuffRarity = rarity.getRarity();
@@ -70,11 +71,11 @@ public class LootController {
             stuff.setType();
             stuffDAO.save(stuff);
         } else if (lootType == "Ressource"){
-            Ressources ressource = new Ressources();
+            Ressources ressource = new Ressources(loot);
             ressource.setType();
             ressourcesDAO.save(ressource);
         } else {
-            
+
         }        
     }
 }
