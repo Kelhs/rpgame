@@ -3,14 +3,17 @@ package com.rpgame.rpg.model;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Ressources{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "ressources_seq_gen")
+    @SequenceGenerator(name = "ressources_seq_gen", sequenceName = "RESSOURCES_SEQ")
     private int id;
 
     @OneToOne(fetch =  FetchType.LAZY)
@@ -18,8 +21,7 @@ public class Ressources{
     protected Loot loot;
     private String categorie = "Ressources";
     private String type;
-    private int maxPossibilities = 3;
-    private double randomStuff = Math.floor((Math.random() * maxPossibilities) + 1);
+    
     
     public Ressources(Loot loot){
         this.loot = loot;
@@ -33,6 +35,8 @@ public class Ressources{
     }
 
     public void setType(){
+        int maxPossibilities = 3;
+        double randomStuff = Math.floor((Math.random() * maxPossibilities) + 1);
         if(randomStuff == 1){
             this.type = "Gold";
         } else if(randomStuff == 2){

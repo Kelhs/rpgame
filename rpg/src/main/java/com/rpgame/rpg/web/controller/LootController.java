@@ -51,9 +51,9 @@ public class LootController {
         return statsDAO.findById(id);
     }
 
-    @PostMapping("/Randomdrop")
-    public void createRandomDrop(){
-        int luck = getStatsById(1).getLuck();
+    @PostMapping("/Randomdrop/{playerId}")
+    public void createRandomDrop(@PathVariable int playerId){
+        int luck = getStatsById(playerId).getLuck();
         Loot loot = new Loot(luck);
         loot.setType();
         String lootType = loot.getType();
@@ -74,8 +74,6 @@ public class LootController {
             Ressources ressource = new Ressources(loot);
             ressource.setType();
             ressourcesDAO.save(ressource);
-        } else {
-
-        }        
+        }      
     }
 }

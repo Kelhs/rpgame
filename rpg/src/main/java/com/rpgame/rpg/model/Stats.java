@@ -2,12 +2,15 @@ package com.rpgame.rpg.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Stats {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "stats_seq_gen")
+    @SequenceGenerator(name = "stats_seq_gen", sequenceName = "STATS_SEQ")
     private int id;
 
     private int luck;
@@ -17,22 +20,32 @@ public class Stats {
     private int stamina;
 
     public Stats(){
+    }
 
+    public Stats(int agility, int intelligence, int luck, int stamina, int strength){
+        this.agility = agility;
+        this.intelligence = intelligence;
+        this.luck = luck;
+        this.stamina = stamina;
+        this.strength = strength;
+    } 
+
+    public Stats(int id, int agility, int intelligence, int luck, int stamina, int strength){
+        this.id = id;
+        this.agility = agility;
+        this.intelligence = intelligence;
+        this.luck = luck;
+        this.stamina = stamina;
+        this.strength = strength;
     }
     
+
 
     /**
      * @return int return the id
      */
     public int getId() {
         return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

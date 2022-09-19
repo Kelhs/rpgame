@@ -1,16 +1,16 @@
 package com.rpgame.rpg.model;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Rarity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "rarity_seq_gen")
+    @SequenceGenerator(name = "rarity_seq_gen", sequenceName = "RARITY_SEQ")
     private int id;
 
     // @OneToOne(fetch =  FetchType.LAZY)
@@ -22,16 +22,11 @@ public class Rarity {
     private int rarePercent = 200;
     private int uncommonPercent = 300;
     private int commonPercent = 400;
-    private double rarityRandom = Math.floor(Math.random() * 1000);
     private int commonToUncommonRest = 0;
 
 
     public Rarity(int characterLuck){
         this.characterLuck = characterLuck;
-    }
-
-    public double getRarityRandom(){
-        return rarityRandom;
     }
 
     public int getCommonToUncommonRest(){
@@ -41,15 +36,17 @@ public class Rarity {
      * @return String return the rarity
      */
     public String getRarity() {
-        if(getRarityRandom() <= getLegendaryPercent()){
+        double rarityRandom = Math.floor(Math.random() * 1000);
+
+        if(rarityRandom <= getLegendaryPercent()){
             return "Legendary";
-        } else if(getRarityRandom() > getLegendaryPercent() && getRarityRandom() <= getLegendaryPercent() + getEpicPercent()){
+        } else if(rarityRandom > getLegendaryPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent()){
             return "Epic";
-        } else if(getRarityRandom() > getLegendaryPercent() + getEpicPercent() && getRarityRandom() <= getLegendaryPercent() + getEpicPercent() + getRarePercent()){
+        } else if(rarityRandom > getLegendaryPercent() + getEpicPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent()){
             return "Rare";
-        } else if(getRarityRandom() > getLegendaryPercent() + getEpicPercent() + getRarePercent() && getRarityRandom() <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent()){
+        } else if(rarityRandom > getLegendaryPercent() + getEpicPercent() + getRarePercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent()){
             return "Uncommon";
-        } else if(getRarityRandom() > getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() && getRarityRandom() <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() + getCommonPercent()){
+        } else if(rarityRandom > getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() + getCommonPercent()){
             return "Common";
         } else {
             return "oupsi";

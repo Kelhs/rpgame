@@ -2,13 +2,16 @@ package com.rpgame.rpg.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Loot {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "loot_seq_gen")
+    @SequenceGenerator(name = "loot_seq_gen", sequenceName = "LOOT_SEQ")
     private int id;
 
     private String type;

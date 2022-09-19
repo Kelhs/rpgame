@@ -1,15 +1,9 @@
 package com.rpgame.rpg.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
 public class Armor extends Stuff {
-
-    @Id
-    @GeneratedValue
-    private int id;
     
     public Armor(Loot loot, String rarity){
         super(loot, rarity);    
