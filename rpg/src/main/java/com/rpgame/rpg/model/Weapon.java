@@ -5,8 +5,13 @@ import javax.persistence.Entity;
 @Entity
 public class Weapon extends Stuff {
     
-    public Weapon(Loot loot, String rarity){   
+    public Weapon(){
+
+    }
+
+    public Weapon(Loot loot, String rarity, String categorie){   
         super(loot, rarity);
+        this.categorie = categorie;
     }
 
     @Override

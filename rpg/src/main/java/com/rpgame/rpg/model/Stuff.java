@@ -29,21 +29,30 @@ public class Stuff{
     @OneToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "lootId")
     protected Loot loot;
+    protected String categorie;
     protected String type;
-    protected String categorie = "Stuff";
     private String rarity;
     
+    public Stuff(){
 
+    }
     public Stuff(Loot loot, String rarity){
         this.loot = loot;
         this.rarity = rarity;
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public String getRarity(){
+        return rarity;
     }
 
     /**
      * @return String return the categorie
      */
     public String getCategorie() {
-        setCategorie();
         return categorie;
     }
 
@@ -54,9 +63,7 @@ public class Stuff{
             this.categorie = "Armor";
         } else if(randomStuff == 2){
             this.categorie = "Weapon";
-        } else {
-            this.categorie = "Erreur";
-        }
+        }        
     }
 
     /**

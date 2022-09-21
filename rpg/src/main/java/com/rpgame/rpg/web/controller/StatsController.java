@@ -22,6 +22,11 @@ public class StatsController {
         this.statsDAO = statsDAO;
     }
 
+    @GetMapping("/Stats/{id}")
+    public Stats getStatsById(@PathVariable int id){
+        return statsDAO.findById(id);
+    }
+
     @PostMapping("/Stats")
     public void postStats(@RequestBody StatsDTO statsDTO){
         statsDAO.save(StatsDTO.StatsDTOToStats(statsDTO));
@@ -34,4 +39,6 @@ public class StatsController {
         Stats statsUpdated = StatsDTO.UpdateStatsDTOToStats(statsDTO, playerId);
         statsDAO.save(statsUpdated);
     }
+
+
 }
