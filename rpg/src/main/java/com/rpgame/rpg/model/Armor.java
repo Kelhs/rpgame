@@ -1,8 +1,11 @@
 package com.rpgame.rpg.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class Armor extends Stuff {
     
     public Armor(){

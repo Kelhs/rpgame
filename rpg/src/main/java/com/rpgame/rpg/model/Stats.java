@@ -4,13 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class Stats {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "stats_seq_gen")
-    @SequenceGenerator(name = "stats_seq_gen", sequenceName = "STATS_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @SequenceGenerator(name = "stats_seq_gen", sequenceName = "STATS_SEQ")
     private int id;
 
     private int luck;

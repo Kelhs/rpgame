@@ -1,5 +1,6 @@
 package com.rpgame.rpg.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,16 +8,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class Ressources{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "ressources_seq_gen")
-    @SequenceGenerator(name = "ressources_seq_gen", sequenceName = "RESSOURCES_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @SequenceGenerator(name = "ressources_seq_gen", sequenceName = "RESSOURCES_SEQ")
     private int id;
 
-    @OneToOne(fetch =  FetchType.LAZY)
+    @OneToOne(fetch =  FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "lootId")
     protected Loot loot;
     private String categorie = "Ressources";
@@ -25,6 +28,10 @@ public class Ressources{
     
     public Ressources(Loot loot){
         this.loot = loot;
+    }
+
+    public int getId(){
+        return id;
     }
 
     /**

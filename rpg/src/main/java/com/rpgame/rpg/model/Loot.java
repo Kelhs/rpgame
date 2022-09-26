@@ -4,17 +4,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Loot {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "loot_seq_gen")
-    @SequenceGenerator(name = "loot_seq_gen", sequenceName = "LOOT_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String type;
+
     private int characterLuck = 0;
     
     public Loot(){

@@ -1,21 +1,7 @@
 package com.rpgame.rpg.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
-@Entity
 public class Rarity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "rarity_seq_gen")
-    @SequenceGenerator(name = "rarity_seq_gen", sequenceName = "RARITY_SEQ")
-    private int id;
 
-    // @OneToOne(fetch =  FetchType.LAZY)
-    // @JoinColumn(name = "stuffId")
-    // protected Stuff stuff;
     private int characterLuck = 0;
     private int legendaryPercent = 20;
     private int epicPercent = 80;
@@ -23,7 +9,6 @@ public class Rarity {
     private int uncommonPercent = 300;
     private int commonPercent = 400;
     private int commonToUncommonRest = 0;
-
 
     public Rarity(int characterLuck){
         this.characterLuck = characterLuck;
@@ -49,7 +34,7 @@ public class Rarity {
         } else if(rarityRandom > getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() + getCommonPercent()){
             return "Common";
         } else {
-            return "oupsi";
+            return "";
         }
     }
 
