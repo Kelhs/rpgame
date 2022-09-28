@@ -84,13 +84,6 @@ class RpgApplicationTests {
 	}
 
 	@Test
-	public void testGetLuckStat() throws Exception {
-		mockMvc.perform(get("/Stats/1"))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.luck", is(50)));
-	}
-
-	@Test
 	public void whenCreateARandomLoot_checkThatCategorieIsGood() throws Exception {
 		MvcResult result = mockMvc.perform(post("/Randomdrop/10"))
 							.andExpect(status().isOk())

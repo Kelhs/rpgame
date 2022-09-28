@@ -1,0 +1,6 @@
+{
+    "java.project.sourcePaths": [
+        "rpgame-front/src/main/java/com/rpgame/app"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

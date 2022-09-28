@@ -20,25 +20,34 @@ public class Stats {
     private int agility;
     private int intelligence;
     private int stamina;
+    private int health;
+    private int maxHealth;
+    private double speed;
 
     public Stats(){
     }
 
-    public Stats(int agility, int intelligence, int luck, int stamina, int strength){
+    public Stats(int agility, int intelligence, int luck, int stamina, int strength, int health, int maxHealth, double speed){
         this.agility = agility;
         this.intelligence = intelligence;
         this.luck = luck;
         this.stamina = stamina;
         this.strength = strength;
+        this.health = health;
+        this.maxHealth = maxHealth;
+        this.speed = speed;
     } 
 
-    public Stats(int id, int agility, int intelligence, int luck, int stamina, int strength){
+    public Stats(int id, int agility, int intelligence, int luck, int stamina, int strength, int health, int maxHealth, double speed){
         this.id = id;
         this.agility = agility;
         this.intelligence = intelligence;
         this.luck = luck;
         this.stamina = stamina;
         this.strength = strength;
+        this.health = health;
+        this.maxHealth = maxHealth;
+        this.speed = speed;
     }
     
 
@@ -118,6 +127,56 @@ public class Stats {
      */
     public void setStamina(int stamina) {
         this.stamina = stamina;
+    }
+
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return int return the health
+     */
+    public int getHealth() {
+        return health;
+    }
+
+    /**
+     * @param health the health to set
+     */
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    /**
+     * @return int return the maxHealth
+     */
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    /**
+     * @param maxHealth the maxHealth to set
+     */
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    /**
+     * @return double return the speed
+     */
+    public double getSpeed() {
+        return speed;
+    }
+
+    /**
+     * @param speed the speed to set
+     */
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
 }

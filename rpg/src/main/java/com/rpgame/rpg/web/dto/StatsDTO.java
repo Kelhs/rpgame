@@ -9,6 +9,9 @@ public class StatsDTO {
     private int luck;
     private int stamina;
     private int strength;
+    private int health;
+    private int maxHealth;
+    private double speed;
 
     /**
      * @return int return the id
@@ -95,12 +98,12 @@ public class StatsDTO {
     }
 
     public static Stats UpdateStatsDTOToStats(StatsDTO statsDTO, int id){
-        Stats statsToUpdate = new Stats(statsDTO.id, statsDTO.agility, statsDTO.intelligence, statsDTO.luck, statsDTO.stamina, statsDTO.strength);
+        Stats statsToUpdate = new Stats(statsDTO.id, statsDTO.agility, statsDTO.intelligence, statsDTO.luck, statsDTO.stamina, statsDTO.strength, statsDTO.health, statsDTO.maxHealth, statsDTO.speed);
         return statsToUpdate;
     }
 
     public static Stats StatsDTOToStats(StatsDTO statsDTO){
-        Stats stats = new Stats(statsDTO.agility, statsDTO.intelligence, statsDTO.luck, statsDTO.stamina, statsDTO.strength);
+        Stats stats = new Stats(statsDTO.agility, statsDTO.intelligence, statsDTO.luck, statsDTO.stamina, statsDTO.strength, statsDTO.health, statsDTO.maxHealth, statsDTO.speed);
         return stats;
     }
 }
