@@ -5,9 +5,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-
+import java.util.ArrayList;
 
 import org.json.*;
 
@@ -17,47 +16,49 @@ import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 
 import main.KeyHandler;
+import main.UtilityTool;
+import object.PRO_ThrowingShield;
 import main.GamePanel;
 
 public class Player extends Entity {
-    GamePanel gp;
     KeyHandler keyH;
-
+    int invinciblePlayerCounter;
     public final int screenX;
     public final int screenY;
-    int hasKey = 0;
+    public int hasKey = 2;
+    
+
 
     public Player(GamePanel gp, KeyHandler keyH){
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
-        screenY = gp.screnHeight/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
+        down = new ArrayList<>();
+        up = new ArrayList<>();
+        left = new ArrayList<>();
+        right = new ArrayList<>();
         solidArea = new Rectangle();
-        solidArea.x = 16;
-        solidArea.y = 32;
+        solidArea.x = 20;
+        solidArea.y = 20;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        solidArea.width = 40;
+        solidArea.height = 60;
+
 
         setDefaultValues();
         getPlayerImage();
     }
 
     public void getPlayerImage(){
-        try{
-            up1 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/assets/player/boy_right_2.png"));
-        } catch(IOException e) {
-            e.printStackTrace();
+        for(int i = 0 ; i<= 14; i++){
+            down.add(setup("player/front/warrior" + i));
+            up.add(setup("player/back/warrior" + i));
+            left.add(setup("player/left/warrior" + i));
+            right.add(setup("player/right/warrior" + i));
         }
     }
 
@@ -65,12 +66,19 @@ public class Player extends Entity {
         try{
             JSONObject stats = getPlayerStats();
             speed = stats.getInt("speed");
+            luck = stats.getInt("luck");
         } catch(IOException e){
             e.printStackTrace();
         }
         worldX = gp.tileSize * (gp.maxWorldCol/2);
         worldY = gp.tileSize * (gp.maxWorldRow/2);
-        direction = "down";
+        maxHealth = 100;
+        health = maxHealth;
+        numberOfImage = 14;
+        attack = 5;
+        defense = 0;
+        projectile = new PRO_ThrowingShield(gp);
+
     }
 
     public void update(){
@@ -96,6 +104,8 @@ public class Player extends Entity {
             int objIndex = gp.cChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
+            
+
             //IF COLLISION IS FALSE, PLAYER CAN MOVE
             if(collisionOn == false){
                 switch(direction){
@@ -115,81 +125,98 @@ public class Player extends Entity {
             }
 
             spriteCounter++;
-            if(spriteCounter > 16){
-                if(spriteNum == 1){
-                    spriteNum = 2;
-                } else if(spriteNum == 2){
-                    spriteNum = 1;
+            if(spriteCounter == 3){
+                spriteNum ++;
+                if(spriteNum > 14){
+                    spriteNum = 0;
                 }
                 spriteCounter = 0;
             }
-        }      
+        } 
+        if(invincible){
+            invinciblePlayerCounter ++;
+            if(invinciblePlayerCounter > 60){
+                invincible = false;
+                invinciblePlayerCounter = 0;
+            }
+        } 
+
+        //CHECK MONSTER COLLISION
+        int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+        contactMonster(monsterIndex);
+        
+        if(!projectile.alive){
+            projectile.set(this.worldX, this.worldY, this.direction, true, this);
+            gp.projectileList.add(projectile);
+        }
     }
 
     public void pickUpObject(int index){
         if( index != 999){
-            String objectName = gp.obj[index].name;
+            String objectName = gp.obj.get(index).name;
             
             switch(objectName){
                 case "key":
                     hasKey++;
-                    gp.obj[index] = null;
+                    gp.obj.get(index).gotInteract = true;
+                    if(gp.obj.get(index).gotInteract){
+                        gp.obj.remove(index);
+                    }   
+                    gp.ui.showMessage("Key picked up");
                     break;
                 case "chest":
                     collisionOn = true;
                     if(hasKey > 0){
-                        try{
-                            gp.obj[index].image = ImageIO.read(getClass().getResourceAsStream("/assets/objects/chest_opened.png"));
-                            hasKey--;
-                        } catch(IOException e){
-                            e.printStackTrace();
+
+                            if(!gp.obj.get(index).gotInteract){
+                                gp.ui.showMessage("Key used");
+                                gp.obj.get(index).gotInteract = true;
+                                gp.obj.get(index).image = setup("objects/chest_opened");
+                                hasKey--;
+                            }
+                        
+                    } else {
+                        if(!gp.obj.get(index).gotInteract){
+                            gp.ui.showMessage("Key is needed");
                         }
                     }
                     break;
             }
         }
     }
-    public void draw(Graphics2D g2){
-        
-        BufferedImage image = null;
 
-        switch(direction){
-            case "up":
-                if(spriteNum == 1){
-                    image = up1;
+    public void contactMonster(int i){
+        if(i != 999){
+            if(!invincible){
+                int damage = gp.monster.get(i).attack - defense;
+                if(damage < 0){
+                    damage = 0;
                 }
-                if(spriteNum == 2){
-                    image = up2;
-                }
-                break;
-            case "down":
-                if(spriteNum == 1){
-                    image = down1;
-                }
-                if(spriteNum == 2){
-                    image = down2;
-                }
-                break;
-            case "left":
-                if(spriteNum == 1){
-                    image = left1;
-                }
-                if(spriteNum == 2){
-                    image = left2;
-                }
-                break;
-            case "right":
-                if(spriteNum == 1){
-                    image = right1;
-                }
-                if(spriteNum == 2){
-                    image = right2;
-                }
-                break;
+                health -= damage;
+                invincible = true;
+            }
         }
-
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
+
+    public void damageMonster(int i, Entity e){
+        if(i != 999){
+            if(!gp.monster.get(i).invincible){
+                int damage = e.attack - gp.monster.get(i).defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+
+                gp.monster.get(i).health -= damage;
+                gp.monster.get(i).invincible = true;
+                // gp.monster.get(i).damageReaction();
+                if(gp.monster.get(i).health <= 0){
+                    gp.monster.get(i).dying = true;
+                    gp.monster.get(i).alive = false;
+                }
+            }
+        }
+    }
+    
 
     public JSONObject getPlayerStats() throws IOException{
         URL urlForGetRequest = new URL("http://localhost:9090/Stats/1");

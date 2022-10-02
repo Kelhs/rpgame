@@ -1,17 +1,19 @@
 package object;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import entity.Entity;
+import main.GamePanel;
+import java.awt.Rectangle;
 
-import javax.imageio.ImageIO;
-
-public class OBJ_Key extends SuperObject {
+public class OBJ_Key extends Entity {
     
-    public OBJ_Key(){
+    public OBJ_Key(GamePanel gp){
+        super(gp);
+
+        down = new ArrayList<>();
         name = "key";
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/assets/objects/key.png"));
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        solidArea = new Rectangle(0, 0, 80, 80);
+        image = setup("objects/key");
+        // down.add(image);
     }
 }

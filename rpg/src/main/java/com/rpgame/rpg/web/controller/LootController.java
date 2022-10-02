@@ -66,7 +66,10 @@ public class LootController {
             ressourcesDAO.save(ressource);
             return ressource;
         } else {
-            return "Aucun loot";
+            return "{" +
+                    "'categorie':" +
+                    "'noLoot'" +
+                    "}";
         }  
           
     }
