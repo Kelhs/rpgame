@@ -11,7 +11,7 @@ public class WEA_Axe extends Stuff {
 
         name = "Axe";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/axe");
+        image = setup("objects/axe", gp.tileSize, gp.tileSize);
     }
     
 }

@@ -12,7 +12,7 @@ public class OBJ_Chest extends Entity {
 
         name = "chest";
         solidArea = new Rectangle(0, 0, 80, 50);
-        image = setup("objects/chest");
+        image = setup("objects/chest", gp.tileSize, gp.tileSize);
         // down.add(image);
         collision = true;
         

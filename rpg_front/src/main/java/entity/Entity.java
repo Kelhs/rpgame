@@ -7,19 +7,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
 
 import main.GamePanel;
 import main.UtilityTool;
 import object.ARM_Boots;
 import object.ARM_Head;
 import object.ARM_Legs;
+import object.OBJ_Heart;
+import object.OBJ_Key;
 import object.RESS_Gold;
 import object.RESS_Stone;
 import object.RESS_Wood;
@@ -53,7 +53,8 @@ public class Entity {
     public boolean collision = false;
     public boolean gotInteract = false;
     public boolean dying = false;
-    public int type; // 0 = player; 1 = npc; 2 = monster;
+    public boolean onPath = false;
+    public int type; // 0 = player; 1 = npc; 2 = monster; stuff = 3
     public int actionLockCounter;
 
     public int attack, strength, agility, intelligence, speed, health, maxHealth, defense, luck, attackSpeed;
@@ -73,11 +74,10 @@ public class Entity {
 
     public void update(){
         setAction();
-
         collisionOn = false;
         gp.cChecker.checkTile(this);
         // gp.cChecker.checkEntity(this, gp.monster);
-        boolean contactPlayer = gp.cChecker.checkPlayer(this);
+        // boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
         if(collisionOn == false){
             switch(direction){
@@ -156,13 +156,13 @@ public class Entity {
         g2.drawImage(image, this.worldX, this.worldY, gp.tileSize, gp.tileSize, null);
     }
 
-    public BufferedImage setup(String imagePath){
+    public BufferedImage setup(String imagePath, int width, int height){
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
         try{
             image = ImageIO.read(getClass().getResourceAsStream("/assets/" + imagePath + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+            image = uTool.scaleImage(image, width, height);
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -196,13 +196,20 @@ public class Entity {
     public void checkDrop(){
         int iRandom = new Random().nextInt(100);
         Entity lootCreated = null;
-        if(iRandom < 10){
+        if(iRandom < 5){
             //DROP KEY
-        } else if(iRandom >= 10 && iRandom < 30){
+            lootCreated = new OBJ_Key(gp);
+            dropItem(lootCreated);
+        } else if(iRandom >= 5 && iRandom < 10){
             //DROP HEALTH
-        } else if(iRandom >= 30 && iRandom < 50){
+            lootCreated = new OBJ_Heart(gp);
+            dropItem(lootCreated);
+        } else if(iRandom >= 10 && iRandom < 60){
             //DROP NOTHING
-        } else {
+        } else if(iRandom >= 60 && iRandom < 70){
+            //DROP PERIODIC BOOST
+        } else if(iRandom >= 70 && iRandom <= 100){
+            //DROP LOOT
             JSONObject loot = null;
             try {
                 loot = setLootOnMonsterKill();
@@ -236,7 +243,6 @@ public class Entity {
                         break;
                 }
                 dropItem(lootCreated);
-
             }
             if(lootCategorie.equals("Ressources")){
                 String lootType = loot.getString("type");
@@ -263,7 +269,71 @@ public class Entity {
             droppedItem.worldX = worldX;
             droppedItem.worldY = worldY;
             gp.obj.add(droppedItem);
+    }
+
+    public void searchPath(int goalCol, int goalRow){
+        int startCol = (worldX + solidArea.x)/gp.tileSize;
+        int startRow = (worldY + solidArea.y)/gp.tileSize;
+
+        gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow, this);
+
+        if(gp.pFinder.search()){
+            //NEXT WORLDX & WORLDY
+            int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
+            int nextY = gp.pFinder.pathList.get(0).row * gp.tileSize;
+
+            //ENTITY SOLIDAREA POSITION
+            int enLeftX = worldX + solidArea.x;
+            int enRightX = worldX + solidArea.x + solidArea.width;
+            int enTopY = worldY + solidArea.y;
+            int enBottomY = worldY + solidArea.y + solidArea.height;
+
+            if(enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize){
+                direction = "up";
+            }
+            else if(enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize){
+                direction = "down";
+            }
+            else if(enTopY >= nextY && enBottomY < nextY + gp.tileSize){
+                if(enLeftX > nextX){
+                    direction = "left";
+                }
+                if(enLeftX < nextX){
+                    direction = "right";
+                }
+            }
+            else if(enTopY > nextY && enLeftX > nextX){
+                direction = "up";
+                if(collisionOn){
+                    direction = "left";
+                }
+            }
+            else if(enTopY > nextY && enLeftX < nextX){
+                direction = "up";
+                if(collisionOn){
+                    direction = "right";
+                }
+            }
+            else if(enTopY < nextY && enLeftX > nextX){
+                direction = "down";
+                if(collisionOn){
+                    direction = "left";
+                }
+            }
+            else if(enTopY < nextY && enLeftX < nextX){
+                direction = "down";
+                if(collisionOn){
+                    direction = "right";
+                }
+            }
+
+            // int nextCol = gp.pFinder.pathList.get(0).col;  
+            // int nextRow = gp.pFinder.pathList.get(0).row;   
+            // if(nextCol == goalCol && nextRow == goalRow){
+            //     onPath = false;
+            // }
             
-        
+          
+        }
     }
 }

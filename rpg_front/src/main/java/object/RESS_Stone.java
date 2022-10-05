@@ -15,7 +15,7 @@ public class RESS_Stone extends Entity {
         down = new ArrayList<>();
         name = "Stone";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/stone");    
+        image = setup("objects/stone", gp.tileSize, gp.tileSize);    
     }
     
 }

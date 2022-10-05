@@ -11,6 +11,7 @@ public class Stuff extends Entity{
 
         this.id = id;
         this.rarity = rarity;
+         type = 3;
 
         numberOfImage = 0;
     }

@@ -11,7 +11,7 @@ public class WEA_Sword extends Stuff {
 
         name = "Sword";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/sword");
+        image = setup("objects/sword", gp.tileSize, gp.tileSize);
     }
  
 }

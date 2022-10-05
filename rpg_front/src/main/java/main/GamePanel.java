@@ -10,6 +10,7 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
@@ -36,12 +37,13 @@ public class GamePanel extends JPanel implements Runnable {
     //FPS
     int fps = 60;
 
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     public UI ui = new UI(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
+    public PathFinder pFinder = new PathFinder(this);
 
     //TIME
     double drawInterval = 1000000000/fps;
@@ -61,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
+    public int currentMap = 0;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -134,12 +137,6 @@ public class GamePanel extends JPanel implements Runnable {
                     projectileList.remove(i);
                 }
             }
-            // //Loot 
-            // for(int i = 0; i < loot.size(); i++){
-            //     if(loot.get(i) != null){
-            //         loot.get(i).update();
-            //     }
-            // }
         }
         if(gameState == pauseState){
             //none
@@ -151,7 +148,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        //TTLE SCREEN
+        //TITLE SCREEN
         if(gameState == titleState){
             ui.draw(g2);
         } else {
@@ -161,7 +158,6 @@ public class GamePanel extends JPanel implements Runnable {
 
             for(int i = 0; i < obj.size(); i++){
                 if(obj.get(i) != null){
-                    System.out.println(obj.get(i));
                     obj.get(i).drawObject(g2, this, obj.get(i).image);
                 }
             }
@@ -171,6 +167,7 @@ public class GamePanel extends JPanel implements Runnable {
                     entityList.add(monster.get(i));
                 }
             }
+
             for(int i = 0; i < projectileList.size(); i++){
                 if(projectileList.get(i) != null){
                     entityList.add(projectileList.get(i));
@@ -188,11 +185,6 @@ public class GamePanel extends JPanel implements Runnable {
                 
             });
 
-            //DRAW LOOT
-            for(int i = 0; i < loot.size(); i++){
-                loot.get(i).drawLoot(g2);
-            }
-
             //DRAW ENTITY
             for(int i = 0; i < entityList.size(); i++){
                 entityList.get(i).draw(g2);
@@ -208,6 +200,5 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         g2.dispose();
-
     }
 }

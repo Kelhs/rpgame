@@ -27,14 +27,14 @@ public class PRO_ThrowingShield extends Projectile {
         solidArea = new Rectangle(0, 0, 80, 80);
 
         
-        getImage();
+        getImage(gp);
     } 
 
-    public void getImage(){
-        up.add(setup("objects/shield_wood"));
-        down.add(setup("objects/shield_wood"));
-        left.add(setup("objects/shield_wood"));
-        right.add(setup("objects/shield_wood"));
+    public void getImage(GamePanel gp){
+        up.add(setup("objects/shield_wood", gp.tileSize/2, gp.tileSize/2));
+        down.add(setup("objects/shield_wood", gp.tileSize/2, gp.tileSize/2));
+        left.add(setup("objects/shield_wood", gp.tileSize/2, gp.tileSize/2));
+        right.add(setup("objects/shield_wood", gp.tileSize/2, gp.tileSize/2));
     }
     
 }

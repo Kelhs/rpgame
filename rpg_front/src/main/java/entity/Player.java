@@ -1,6 +1,5 @@
 package entity;
 
-import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,13 +9,9 @@ import java.util.ArrayList;
 
 import org.json.*;
 
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 
 import main.KeyHandler;
-import main.UtilityTool;
 import object.PRO_ThrowingShield;
 import main.GamePanel;
 
@@ -25,7 +20,10 @@ public class Player extends Entity {
     int invinciblePlayerCounter;
     public final int screenX;
     public final int screenY;
-    public int hasKey = 2;
+    public int hasKey;
+    public int amountOfGold;
+    public int amountOfWood;
+    public int amountOfStone;
     
 
 
@@ -55,10 +53,10 @@ public class Player extends Entity {
 
     public void getPlayerImage(){
         for(int i = 0 ; i<= 14; i++){
-            down.add(setup("player/front/warrior" + i));
-            up.add(setup("player/back/warrior" + i));
-            left.add(setup("player/left/warrior" + i));
-            right.add(setup("player/right/warrior" + i));
+            down.add(setup("player/front/warrior" + i, gp.tileSize, gp.tileSize));
+            up.add(setup("player/back/warrior" + i, gp.tileSize, gp.tileSize));
+            left.add(setup("player/left/warrior" + i, gp.tileSize, gp.tileSize));
+            right.add(setup("player/right/warrior" + i, gp.tileSize, gp.tileSize));
         }
     }
 
@@ -167,18 +165,56 @@ public class Player extends Entity {
                 case "chest":
                     collisionOn = true;
                     if(hasKey > 0){
-
-                            if(!gp.obj.get(index).gotInteract){
-                                gp.ui.showMessage("Key used");
-                                gp.obj.get(index).gotInteract = true;
-                                gp.obj.get(index).image = setup("objects/chest_opened");
-                                hasKey--;
-                            }
+                        if(!gp.obj.get(index).gotInteract){
+                            gp.ui.showMessage("Key used");
+                            gp.obj.get(index).gotInteract = true;
+                            gp.obj.get(index).image = setup("objects/chest_opened", gp.tileSize, gp.tileSize);
+                            hasKey--;
+                        }
                         
                     } else {
                         if(!gp.obj.get(index).gotInteract){
                             gp.ui.showMessage("Key is needed");
                         }
+                    }
+                    break;
+                case "heart":
+                    gp.obj.get(index).gotInteract = true;
+                    if(health < maxHealth){
+                        health += 10;
+                        if(health > maxHealth){
+                            health = maxHealth;
+                        }
+                    }
+                    if(gp.obj.get(index).gotInteract){
+                        gp.obj.remove(index);
+                    }
+                    break;
+                case "Gold":
+                    gp.obj.get(index).gotInteract = true;
+                    if(gp.obj.get(index).gotInteract){
+                        amountOfGold++;
+                        gp.obj.remove(index);
+                    }
+                    break;
+                case "Wood":
+                    gp.obj.get(index).gotInteract = true;
+                    if(gp.obj.get(index).gotInteract){
+                        amountOfWood++;
+                        gp.obj.remove(index);
+                    }
+                    break;
+                case "Stone":
+                    gp.obj.get(index).gotInteract = true;
+                    if(gp.obj.get(index).gotInteract){
+                        amountOfStone++;
+                        gp.obj.remove(index);
+                    }
+                    break;
+                default:
+                    gp.obj.get(index).gotInteract = true;
+                    if(gp.obj.get(index).gotInteract){
+                        gp.obj.remove(index);
                     }
                     break;
             }

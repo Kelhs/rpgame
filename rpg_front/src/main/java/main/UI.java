@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.*;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -10,6 +11,10 @@ import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 
 import object.OBJ_Key;
+import object.RESS_Gold;
+import object.RESS_Stone;
+import object.RESS_Wood;
+import object.Stuff;
 
 public class UI {
     
@@ -18,7 +23,7 @@ public class UI {
 
     Font arial_25;
     Font arial_60;
-    BufferedImage keyImage;
+    BufferedImage keyImage, woodImage, goldImage, stoneImage;
     public boolean messageOn = false;
     public String message = "";
     public String previousMessage = "";
@@ -37,7 +42,14 @@ public class UI {
         arial_60 = new Font("Arial", Font.PLAIN, 60);
 
         OBJ_Key key = new OBJ_Key(gp);
+        RESS_Wood wood = new RESS_Wood(gp, 0);
+        RESS_Gold gold = new RESS_Gold(gp, 0);
+        RESS_Stone stone = new RESS_Stone(gp, 0);
+
         keyImage = key.image;
+        woodImage = wood.image;
+        goldImage = gold.image;
+        stoneImage = stone.image;
     }
 
     public void showMessage(String text){
@@ -58,8 +70,17 @@ public class UI {
             //MESSAGE
             g2.setFont(arial_25);
             g2.setColor(Color.white);
-            g2.drawImage(keyImage, -10, -30, gp.tileSize, gp.tileSize, null);
-            g2.drawString("x " + gp.player.hasKey, 55, 45);
+            g2.drawImage(keyImage, 0, -30, gp.tileSize, gp.tileSize, null);
+            g2.drawString("x " + gp.player.hasKey, 65, 45);
+
+            g2.drawImage(goldImage, 0, 50, gp.tileSize, gp.tileSize, null);
+            g2.drawString("x " + gp.player.amountOfGold, 65, 120);
+
+            g2.drawImage(woodImage, 0, 130, gp.tileSize, gp.tileSize, null);
+            g2.drawString("x " + gp.player.amountOfWood, 65, 200);
+
+            g2.drawImage(stoneImage, 0, 210, gp.tileSize, gp.tileSize, null);
+            g2.drawString("x " + gp.player.amountOfStone, 65, 280);
 
             if(messageOn){
                 g2.setFont(g2.getFont().deriveFont(Font.ITALIC, 20));
@@ -81,6 +102,42 @@ public class UI {
 
             //DRAW PLAYER HEALTH
             drawPlayerHealth(gp.player.health, gp.player.maxHealth);
+
+
+            //DRAW RARITY ITEM
+            for(int i = 0; i < gp.obj.size(); i++){
+                int x = 0;
+                int y = 0;
+                if(gp.obj.get(i) != null){
+                    if(gp.obj.get(i).type == 3){
+                        if(gp.obj.get(i).worldX - gp.player.worldX < 0){
+                            x = gp.screenWidth/2 - (gp.player.worldX - gp.obj.get(i).worldX);
+                        }
+                        if(gp.player.worldX - gp.obj.get(i).worldX <= 0){
+                            x = gp.screenWidth/2 + (gp.obj.get(i).worldX - gp.player.worldX);
+                        }
+                        if(gp.obj.get(i).worldY - gp.player.worldY < 0){
+                            y = gp.screenHeight/2 - (gp.player.worldY - gp.obj.get(i).worldY);
+                        }
+                        if (gp.player.worldY - gp.obj.get(i).worldY <= 0){
+                            y = gp.screenHeight/2 + (gp.obj.get(i).worldY - gp.player.worldY);
+                        }
+
+                        if(x > gp.screenWidth){
+                            x = 10000;
+                        }
+                        if(y > gp.screenHeight){
+                            y = 10000;
+                        }
+                        Stuff stuff = (Stuff) gp.obj.get(i);
+                        if (x == 10000 || y == 1000){
+                            //DONT DISPLAY AURA OUT OF SCREEN
+                        }else{
+                            drawRarityAura(stuff.rarity,x - gp.tileSize/3, y - gp.tileSize/2, stuff.name);
+                        }
+                    }
+                }
+            }
         }
         
     }
@@ -209,7 +266,12 @@ public class UI {
             g2.drawString(text, x, y);
             if(commandNum == 0){
                 g2.drawString(">", x - gp.tileSize + 20, y);
-
+                g2.drawString("Spells:", gp.tileSize, 40);
+                g2.drawString("-Throwing Shield:", gp.tileSize, 80);
+                g2.drawString("Throw your shield ", gp.tileSize, 120);
+                g2.drawString(" in front of you", gp.tileSize, 160);
+                g2.drawString(" and come back to", gp.tileSize, 200);
+                g2.drawString(" your position.", gp.tileSize, 240);
             }
 
             //MAGE
@@ -220,7 +282,10 @@ public class UI {
             g2.drawString(text, x, y);
             if(commandNum == 1){
                 g2.drawString(">", x - gp.tileSize + 20, y);
-
+                g2.drawString("Spells:", gp.tileSize, 40);
+                g2.drawString("-Fireball:", gp.tileSize, 80);
+                g2.drawString("Throw a fireball", gp.tileSize, 120);
+                g2.drawString(" in front of you", gp.tileSize, 160);
             }
 
             //ARCHER
@@ -231,7 +296,11 @@ public class UI {
             g2.drawString(text, x, y);
             if(commandNum == 2){
                 g2.drawString(">", x - gp.tileSize + 20, y);
-
+                g2.drawString("Spells:", gp.tileSize, 40);
+                g2.drawString("-Piercing shot", gp.tileSize, 80);
+                g2.drawString("Shot an arrow ", gp.tileSize, 120);
+                g2.drawString(" in front of you.", gp.tileSize, 160);
+                g2.drawString(" It pass through enemies", gp.tileSize, 200);
             }
 
             //DRUD
@@ -242,7 +311,10 @@ public class UI {
             g2.drawString(text, x, y);
             if(commandNum == 3){
                 g2.drawString(">", x - gp.tileSize + 20, y);
-
+                g2.drawString("Spells:", gp.tileSize, 40);
+                g2.drawString("-Throwing Shield:", gp.tileSize, 80);
+                g2.drawString("Throw your shield ", gp.tileSize, 120);
+                g2.drawString(" in front of you", gp.tileSize, 160);
             }
 
             //BACK
@@ -253,7 +325,6 @@ public class UI {
             g2.drawString(text, x, y);
             if(commandNum == 4){
                 g2.drawString(">", x - gp.tileSize + 20, y);
-
             }
         }
     }
@@ -266,6 +337,47 @@ public class UI {
 
         g2.setColor(Color.white);
         g2.fillRect((gp.screenWidth/3) + currentHealth, gp.screenHeight - 60, missingHealth, 20);
+    }
+
+    public void drawRarityAura(String rarity, int worldX, int worldY, String lootName){
+        switch(rarity){
+            case "Common":
+                g2.setPaint(Color.white);
+                break;
+            case "Uncommon":
+                g2.setPaint(Color.green);
+                break;
+            case "Rare":
+                g2.setPaint(Color.blue);
+                break;
+            case "Epic":
+                g2.setPaint(new Color(150, 0, 150));
+                break;
+            case "Legendary":
+                g2.setPaint(Color.yellow);
+                break;
+        }
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.30F));
+        switch(lootName){
+            case "Legs":
+                g2.fillOval(worldX, worldY + 30, 50, 60);
+                break;
+            case "Boots":
+                g2.fillOval(worldX, worldY + 45, 50, 50);
+                break;
+            case "Head":
+                g2.fillOval(worldX, worldY + 40, 50, 50);
+                break;
+            case "Axe":        
+                g2.fillOval(worldX, worldY + 20, 50, 70);
+                break;
+            case "Sword":
+                g2.fillOval(worldX, worldY + 10 , 50, 80);
+                break;
+            case "Hammer":
+                g2.fillOval(worldX, worldY + 20, 50, 70);
+                break;
+        }
     }
 
 }

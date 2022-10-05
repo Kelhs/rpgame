@@ -11,7 +11,7 @@ public class WEA_Hammer extends Stuff {
 
         name = "Hammer";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/hammer");
+        image = setup("objects/hammer", gp.tileSize, gp.tileSize);
     }
 
     

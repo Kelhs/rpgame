@@ -18,10 +18,27 @@ public class Projectile extends Entity{
     }
 
     public void set(int worldX, int worldY, String direction, boolean alive, Entity user){
-        startYPosition = gp.player.worldY;
-        startXPosition = gp.player.worldX;
-        this.worldX = worldX;
-        this.worldY = worldY;
+        switch(direction){
+            case "up":
+                startYPosition = gp.player.worldY - gp.tileSize/2;
+                startXPosition = gp.player.worldX;
+                break;
+            case "down":
+                startYPosition = gp.player.worldY + gp.tileSize/2;
+                startXPosition = gp.player.worldX;
+                break;
+            case "left":
+                startYPosition = gp.player.worldY;
+                startXPosition = gp.player.worldX - gp.tileSize/2;
+                break;
+            case "right":
+                startYPosition = gp.player.worldY;
+                startXPosition = gp.player.worldX + gp.tileSize/2;
+
+        }
+        
+        this.worldX = startXPosition;
+        this.worldY = startYPosition;
         this.direction = direction;
         this.alive = alive;
         this.user = user;

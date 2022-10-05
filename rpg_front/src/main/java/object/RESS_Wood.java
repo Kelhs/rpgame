@@ -15,7 +15,7 @@ public class RESS_Wood extends Entity {
         down = new ArrayList<>();
         name = "Wood";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/wood");    
+        image = setup("objects/wood", gp.tileSize, gp.tileSize);    
     }
     
 }

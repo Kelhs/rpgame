@@ -13,6 +13,6 @@ public class ARM_Boots extends Stuff {
         down = new ArrayList<>();
         name = "Boots";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/boots");
+        image = setup("objects/boots", gp.tileSize, gp.tileSize);
     }
 }

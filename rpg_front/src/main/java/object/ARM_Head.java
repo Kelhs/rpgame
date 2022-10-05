@@ -13,6 +13,6 @@ public class ARM_Head extends Stuff {
         down = new ArrayList<>();
         name = "Head";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/head");
+        image = setup("objects/head", gp.tileSize, gp.tileSize);
     }
 }

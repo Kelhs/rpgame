@@ -9,12 +9,15 @@ import main.GamePanel;
 
 public class MON_GreenSlime extends Entity{
 
+    GamePanel gp;
     public MON_GreenSlime(GamePanel gp) {
         super(gp);
 
+        this.gp = gp;
+
         name = "Green Slime";
         type = 2;
-        speed = 1;
+        speed = 2;
         maxHealth = 40;
         health = maxHealth;
         defense = 0;
@@ -28,6 +31,7 @@ public class MON_GreenSlime extends Entity{
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
+        onPath = true;
         numberOfImage = 1;
 
         up = new ArrayList<>();
@@ -35,39 +39,46 @@ public class MON_GreenSlime extends Entity{
         left = new ArrayList<>();
         right = new ArrayList<>();
 
-        getImage();
+        getImage(gp);
     }
 
-    public void getImage(){
+    public void getImage(GamePanel gp){
         for(int i = 1; i <= 2; i++){
-            up.add(setup("monster/greenslime_down_" + i));
-            down.add(setup("monster/greenslime_down_" + i));
-            left.add(setup("monster/greenslime_down_" + i));
-            right.add(setup("monster/greenslime_down_" + i));
+            up.add(setup("monster/greenslime_down_" + i, gp.tileSize, gp.tileSize));
+            down.add(setup("monster/greenslime_down_" + i, gp.tileSize, gp.tileSize));
+            left.add(setup("monster/greenslime_down_" + i, gp.tileSize, gp.tileSize));
+            right.add(setup("monster/greenslime_down_" + i, gp.tileSize, gp.tileSize));
         }
     }
 
     public void setAction(){
         actionLockCounter++;
 
-        if(actionLockCounter == 120){
-            Random random = new Random();
-            int i = random.nextInt(100) + 1;
+        if(onPath){
+            int goalCol = (gp.player.worldX + gp.player.solidArea.x)/gp.tileSize;
+            int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
+            searchPath(goalCol, goalRow);            
+        }
+        else{
+            if(actionLockCounter == 120){
+                Random random = new Random();
+                int i = random.nextInt(100) + 1;
 
-            if(i <= 25){
-                direction = "up";
-            }
-            if(i > 25 && i <= 50){
-                direction = "down";
-            }
-            if(i > 50 && i <= 75){
-                direction = "left";
-            }
-            if(i > 75 && i <= 100){
-                direction = "right";
-            }
+                if(i <= 25){
+                    direction = "up";
+                }
+                if(i > 25 && i <= 50){
+                    direction = "down";
+                }
+                if(i > 50 && i <= 75){
+                    direction = "left";
+                }
+                if(i > 75 && i <= 100){
+                    direction = "right";
+                }
 
-            actionLockCounter = 0;
+                actionLockCounter = 0;
+            }
         }
     }
     

@@ -13,7 +13,7 @@ public class OBJ_Key extends Entity {
         down = new ArrayList<>();
         name = "key";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/key");
+        image = setup("objects/key", gp.tileSize, gp.tileSize);
         // down.add(image);
     }
 }

@@ -96,40 +96,54 @@ class RpgApplicationTests {
 		} else if(content.contains("Aucun loot")){
 			assertEquals(content.contains("Aucun loot"), true);
 		} else {
-			assertEquals(false, true);
+			assertEquals(true, false);
 		}
 	}
 
 	@Test
 	public void whenCreateRandomLootsWithZeroLuck_checkIfInitPercentChanceAreGood(){
-		List<Loot> lootList = new ArrayList<>();
+		List<String> lootList = new ArrayList<>();
 		int stuff = 0;
 		int ressources = 0;
 		int rien = 0;
+		int luck = 0;
 		int err = 0;
 		int expected = 3;
 		int resultLootPercent = 0;
+		String content = "";
 		for(int i = 0; i <= 1000; i++){
-			Loot loot = new Loot(0);
-			loot.setType();
-			lootList.add(loot);
-		}
-		for (Loot lootOfList : lootList) {
-			String type = lootOfList.getType();
-			switch(type){
-				case "Stuff":
-					stuff++;
-					break;
-				case "Ressource":
-					ressources++;
-					break;
-				case "Rien":
-					rien++;
-					break;
-				default:
-					err++;
-					break;
+			MvcResult result;
+			try {
+				result = mockMvc.perform(post("/Randomdrop/" + luck))
+								.andReturn();
+				
+				content = result.getResponse().getContentAsString();
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			lootList.add(content);
+		}
+		for(String lootOfList : lootList) {
+			if(lootOfList.contains("Weapon") || lootOfList.contains("Armor")){
+				stuff++;
+
+
+
+
+
+
+
+
+
+				
+			}else if(lootOfList.contains("Ressources")){
+				ressources++;
+			}else if(lootOfList.contains("noLoot")){
+				rien++;
+			} else {
+				err++;
+			}				
 		}
 
 		if(stuff >= 200 && stuff <= 300){
@@ -141,96 +155,7 @@ class RpgApplicationTests {
 		if(rien >= 250 && rien <= 350){
 			resultLootPercent++;
 		}
-		assertEquals(0, err);
-		assertEquals(expected, resultLootPercent);
-	}
-
-	@Test
-	public void whenCreateRandomLootsWithThirtyFiveLuck_checkIfInitPercentChanceAreGood(){
-		List<Loot> lootList = new ArrayList<>();
-		int stuff = 0;
-		int ressources = 0;
-		int rien = 0;
-		int err = 0;
-		int expected = 3;
-		int resultLootPercent = 0;
-		for(int i = 0; i <= 1000; i++){
-			Loot loot = new Loot(35);
-			loot.setType();
-			lootList.add(loot);
-		}
-		for (Loot lootOfList : lootList) {
-			String type = lootOfList.getType();
-			switch(type){
-				case "Stuff":
-					stuff++;
-					break;
-				case "Ressource":
-					ressources++;
-					break;
-				case "Rien":
-					rien++;
-					break;
-				default:
-					err++;
-					break;
-			}
-		}
-
-		if(stuff >= 550 && stuff <= 650){
-			resultLootPercent++;
-		}
-		if(ressources >= 350 && ressources <= 400){
-			resultLootPercent++;
-		}
-		if(rien == 0){
-			resultLootPercent++;
-		}
-		assertEquals(0, err);
-		assertEquals(expected, resultLootPercent);
-	}
-
-	@Test
-	public void whenCreateRandomLootsWithOneHundredLuck_checkIfInitPercentChanceAreGood(){
-		List<Loot> lootList = new ArrayList<>();
-		int stuff = 0;
-		int ressources = 0;
-		int rien = 0;
-		int err = 0;
-		int expected = 3;
-		int resultLootPercent = 0;
-		for(int i = 0; i <= 1000; i++){
-			Loot loot = new Loot(100);
-			loot.setType();
-			lootList.add(loot);
-		}
-		for (Loot lootOfList : lootList) {
-			String type = lootOfList.getType();
-			switch(type){
-				case "Stuff":
-					stuff++;
-					break;
-				case "Ressource":
-					ressources++;
-					break;
-				case "Rien":
-					rien++;
-					break;
-				default:
-					err++;
-					break;
-			}
-		}
-
-		if(stuff >= 750 && stuff <= 850){
-			resultLootPercent++;
-		}
-		if(ressources >= 150 && ressources <= 250){
-			resultLootPercent++;
-		}
-		if(rien == 0){
-			resultLootPercent++;
-		}
+		System.out.println(stuff + "_" + ressources + "_" + rien);
 		assertEquals(0, err);
 		assertEquals(expected, resultLootPercent);
 	}

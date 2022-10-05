@@ -15,7 +15,7 @@ public class RESS_Gold extends Entity {
         down = new ArrayList<>();
         name = "Gold";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/gold");
+        image = setup("objects/gold", gp.tileSize, gp.tileSize);
     }
     
 }

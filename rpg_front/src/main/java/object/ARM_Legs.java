@@ -13,7 +13,7 @@ public class ARM_Legs extends Stuff{
         down = new ArrayList<>();
         name = "Legs";
         solidArea = new Rectangle(0, 0, 80, 80);
-        image = setup("objects/legs");
+        image = setup("objects/legs", gp.tileSize, gp.tileSize);
     }    
 
     
