@@ -16,17 +16,17 @@ public class StuffController {
     @Autowired
     private final StuffDAO stuffDAO;
 
-    public StuffController(StuffDAO stuffDAO){
+    public StuffController(StuffDAO stuffDAO) {
         this.stuffDAO = stuffDAO;
     }
 
     @GetMapping("/Stuff")
-    public List<Stuff> getStuffList(){
+    public List<Stuff> getStuffList() {
         return stuffDAO.findAll();
     }
-    
+
     @GetMapping("/Stuff/{lootId}")
-    public Stuff getStuffByLootId(@PathVariable int lootId){
+    public Stuff getStuffByLootId(@PathVariable int lootId) {
         return stuffDAO.findOneByLootId(lootId);
     }
 }

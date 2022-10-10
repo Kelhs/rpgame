@@ -52,9 +52,9 @@ public class StuffDTO {
         this.type = type;
     }
 
-    public static Stuff StuffDTO2Stuff(Loot loot, String rarity, String categorie){
+    public static Stuff StuffDTO2Stuff(Loot loot, String rarity, String categorie) {
         Stuff s = new Armor();
-        switch(categorie){
+        switch (categorie) {
             case "Armor":
                 s = new Armor(loot, rarity, categorie);
                 break;

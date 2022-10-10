@@ -12,25 +12,23 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-public class Ressources{
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
+public class Ressources {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // @SequenceGenerator(name = "ressources_seq_gen", sequenceName = "RESSOURCES_SEQ")
     private int id;
 
-    @OneToOne(fetch =  FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lootId")
     protected Loot loot;
     private String categorie = "Ressources";
     private String type;
-    
-    
-    public Ressources(Loot loot){
+
+    public Ressources(Loot loot) {
         this.loot = loot;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
@@ -41,20 +39,19 @@ public class Ressources{
         return this.type;
     }
 
-    public void setType(){
+    public void setType() {
         int maxPossibilities = 3;
         double randomStuff = Math.floor((Math.random() * maxPossibilities) + 1);
-        if(randomStuff == 1){
+        if (randomStuff == 1) {
             this.type = "Gold";
-        } else if(randomStuff == 2){
+        } else if (randomStuff == 2) {
             this.type = "Wood";
-        } else if(randomStuff == 3){
+        } else if (randomStuff == 3) {
             this.type = "Stone";
-        } else{
+        } else {
             this.type = "Error";
         }
     }
-
 
     /**
      * @return string return the categorie

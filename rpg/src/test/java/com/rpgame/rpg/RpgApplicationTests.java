@@ -2,18 +2,16 @@ package com.rpgame.rpg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,11 +19,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.rpgame.rpg.model.Loot;
 import com.rpgame.rpg.model.Rarity;
 import com.rpgame.rpg.web.dao.LootDAO;
 
-@SpringBootTest()
+@SpringBootTest(args = { "--arg1=val1" })
 @AutoConfigureMockMvc
 class RpgApplicationTests {
 
@@ -40,7 +37,7 @@ class RpgApplicationTests {
 	}
 
 	@Test
-	void whenALootIsCreated_defineTypeOfLoot(){
+	void whenALootIsCreated_defineTypeOfLoot() {
 		int luck = 0;
 		int paramRandomEntry = 0;
 		int expected = 10;
@@ -49,14 +46,14 @@ class RpgApplicationTests {
 		double percentRest = 0;
 		double ressourcesPercent = 45;
 		double nothingPercent = 0;
-		for(int i = 1; i <= 10; i++){
-			if(luck > 30){
+		for (int i = 1; i <= 10; i++) {
+			if (luck > 30) {
 				percentRest = luck - 30;
 			} else {
 				percentRest = 0;
 			}
 
-			if(luck <= 55){
+			if (luck <= 55) {
 				stuffPercent += luck;
 				ressourcesPercent -= percentRest;
 			} else {
@@ -64,18 +61,18 @@ class RpgApplicationTests {
 				ressourcesPercent = 20;
 			}
 
-			if(luck <= 30) {
+			if (luck <= 30) {
 				nothingPercent -= luck;
 			} else {
 				nothingPercent = 0;
 			}
 
-			if(paramRandomEntry <= stuffPercent){
-				result ++;
-			} else if (paramRandomEntry > stuffPercent && paramRandomEntry <= stuffPercent + ressourcesPercent){
-				result ++;
-			} else if(paramRandomEntry > stuffPercent + ressourcesPercent){
-				result ++;
+			if (paramRandomEntry <= stuffPercent) {
+				result++;
+			} else if (paramRandomEntry > stuffPercent && paramRandomEntry <= stuffPercent + ressourcesPercent) {
+				result++;
+			} else if (paramRandomEntry > stuffPercent + ressourcesPercent) {
+				result++;
 			}
 			luck += 10;
 			paramRandomEntry += 10;
@@ -86,82 +83,98 @@ class RpgApplicationTests {
 	@Test
 	public void whenCreateARandomLoot_checkThatCategorieIsGood() throws Exception {
 		MvcResult result = mockMvc.perform(post("/Randomdrop/10"))
-							.andExpect(status().isOk())
-							.andReturn();
-							
+				.andExpect(status().isOk())
+				.andReturn();
+
 		String content = result.getResponse().getContentAsString();
 
-		if(content.contains("categorie")){
+		if (content.contains("categorie")) {
 			assertEquals(content.contains("categorie"), true);
-		} else if(content.contains("Aucun loot")){
+		} else if (content.contains("Aucun loot")) {
 			assertEquals(content.contains("Aucun loot"), true);
 		} else {
 			assertEquals(true, false);
 		}
 	}
 
-	@Test
-	public void whenCreateRandomLootsWithZeroLuck_checkIfInitPercentChanceAreGood(){
+	@ParameterizedTest
+	@ValueSource(ints = { 0, 20, 40, 60, 80, 100 })
+	public void whenCreateRandomLoot_checkIfInitPercentChanceAreGood(int luckParam) {
 		List<String> lootList = new ArrayList<>();
 		int stuff = 0;
+		int stuffPercentChance = 250;
+		int ressourcesPercentChance = 450;
+		int nothingPercentChance = 300;
+		int deltaMinMax = 50;
 		int ressources = 0;
 		int rien = 0;
-		int luck = 0;
+		int luck = luckParam;
 		int err = 0;
 		int expected = 3;
 		int resultLootPercent = 0;
 		String content = "";
-		for(int i = 0; i <= 1000; i++){
+
+		if (luck <= 55) {
+			stuffPercentChance += (luck * 10);
+			if (luck <= 55 && luck > 30) {
+				ressourcesPercentChance -= (luck - 30) * 10;
+			}
+		} else {
+			stuffPercentChance = 800;
+			ressourcesPercentChance = 200;
+		}
+
+		if (luck <= 30) {
+			nothingPercentChance -= luck * 10;
+		} else {
+			nothingPercentChance = 0;
+		}
+
+		for (int i = 0; i <= 1000; i++) {
 			MvcResult result;
 			try {
 				result = mockMvc.perform(post("/Randomdrop/" + luck))
-								.andReturn();
-				
+						.andReturn();
 				content = result.getResponse().getContentAsString();
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			lootList.add(content);
 		}
-		for(String lootOfList : lootList) {
-			if(lootOfList.contains("Weapon") || lootOfList.contains("Armor")){
+		for (String lootOfList : lootList) {
+			if (lootOfList.contains("Weapon") || lootOfList.contains("Armor")) {
 				stuff++;
-
-
-
-
-
-
-
-
-
-				
-			}else if(lootOfList.contains("Ressources")){
+			} else if (lootOfList.contains("Ressources")) {
 				ressources++;
-			}else if(lootOfList.contains("noLoot")){
+			} else if (lootOfList.contains("noLoot")) {
 				rien++;
 			} else {
 				err++;
-			}				
+			}
 		}
 
-		if(stuff >= 200 && stuff <= 300){
+		if (stuff >= stuffPercentChance - deltaMinMax && stuff <= stuffPercentChance + deltaMinMax) {
 			resultLootPercent++;
 		}
-		if(ressources >= 400 && ressources <= 500){
+		if (ressources >= ressourcesPercentChance - deltaMinMax
+				&& ressources <= ressourcesPercentChance + deltaMinMax) {
 			resultLootPercent++;
 		}
-		if(rien >= 250 && rien <= 350){
-			resultLootPercent++;
+		if (nothingPercentChance - deltaMinMax < 0) {
+			if (rien >= nothingPercentChance && rien <= nothingPercentChance + deltaMinMax) {
+				resultLootPercent++;
+			}
+		} else {
+			if (rien >= nothingPercentChance - deltaMinMax && rien <= nothingPercentChance + deltaMinMax) {
+				resultLootPercent++;
+			}
 		}
-		System.out.println(stuff + "_" + ressources + "_" + rien);
 		assertEquals(0, err);
 		assertEquals(expected, resultLootPercent);
 	}
 
 	@Test
-	public void whenCreateAStuffWithZeroLuck_checkIfRarityPercentAreGoods(){
+	public void whenCreateAStuffWithZeroLuck_checkIfRarityPercentAreGoods() {
 		int legendary = 0;
 		int epic = 0;
 		int rare = 0;
@@ -172,10 +185,10 @@ class RpgApplicationTests {
 		int resultRarityPercent = 0;
 		int expected = 5;
 
-		for(int i = 0; i<=1000; i ++){
+		for (int i = 0; i <= 1000; i++) {
 			Rarity rarity = new Rarity(luck);
 			String typeOfRarity = rarity.getRarity();
-			switch(typeOfRarity){
+			switch (typeOfRarity) {
 				case "Legendary":
 					legendary++;
 					break;
@@ -196,19 +209,19 @@ class RpgApplicationTests {
 					break;
 			}
 		}
-		if(legendary >= 0 && legendary <= 40){
+		if (legendary >= 0 && legendary <= 40) {
 			resultRarityPercent++;
 		}
-		if(epic >= 60 && epic <= 100){
+		if (epic >= 60 && epic <= 100) {
 			resultRarityPercent++;
 		}
-		if(rare >= 180 && rare <= 220){
+		if (rare >= 180 && rare <= 220) {
 			resultRarityPercent++;
 		}
-		if(uncommon >= 280 && uncommon <= 320){
+		if (uncommon >= 280 && uncommon <= 320) {
 			resultRarityPercent++;
 		}
-		if(common >= 380 && common <= 420){
+		if (common >= 380 && common <= 420) {
 			resultRarityPercent++;
 		}
 		assertEquals(0, err);

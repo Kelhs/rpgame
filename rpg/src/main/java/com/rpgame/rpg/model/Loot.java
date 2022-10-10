@@ -15,12 +15,12 @@ public class Loot {
     private String type;
 
     private int characterLuck = 0;
-    
-    public Loot(){
+
+    public Loot() {
 
     }
-    
-    public Loot(int characterLuck){
+
+    public Loot(int characterLuck) {
         this.characterLuck = characterLuck;
     }
 
@@ -42,7 +42,7 @@ public class Loot {
      * @return int return the percentRest
      */
     private double getPercentRest() {
-        if(characterLuck > 30){
+        if (characterLuck > 30) {
             return this.characterLuck - 30;
         } else {
             return 0;
@@ -55,12 +55,14 @@ public class Loot {
     public double getStuffPercent() {
         double stuffPercent = 25;
 
-        //On cap l'impact de la statistique de chance a 55 pour qu'elle n'ai pas d'effet sur ce taux de drop au dela de 55
-        if(characterLuck <= 55){
+        // On cap l'impact de la statistique de chance a 55 pour qu'elle n'ai pas
+        // d'effet sur ce taux de drop au dela de 55
+        if (characterLuck <= 55) {
             return stuffPercent + characterLuck;
         } else {
-            //Au delà de 55 de stat de chance, le pourcentage n'evolue plus et est cap à 80.
-            return 80;            
+            // Au delà de 55 de stat de chance, le pourcentage n'evolue plus et est cap à
+            // 80.
+            return 80;
         }
     }
 
@@ -70,13 +72,14 @@ public class Loot {
     public double getRessourcesPercent() {
         double ressourcesPercent = 45;
 
-        //On cap l'impact de la statistique de chance a 55 pour qu'elle n'ai pas d'effet sur ce taux de drop au dela de 55
-        if(characterLuck <= 55){
+        // On cap l'impact de la statistique de chance a 55 pour qu'elle n'ai pas
+        // d'effet sur ce taux de drop au dela de 55
+        if (characterLuck <= 55) {
             return ressourcesPercent - getPercentRest();
-        } 
-        else {
-            //Au delà de 55 de stat de chance, le pourcentage n'evolue plus et est cap à 20.
-            return 20;            
+        } else {
+            // Au delà de 55 de stat de chance, le pourcentage n'evolue plus et est cap à
+            // 20.
+            return 20;
         }
     }
 
@@ -85,7 +88,7 @@ public class Loot {
      */
     public double getNothingPercent() {
         double nothingPercent = 0;
-        if(characterLuck <= 30){
+        if (characterLuck <= 30) {
             return nothingPercent - characterLuck;
         } else {
             return 0;
@@ -95,23 +98,26 @@ public class Loot {
     /**
      * @return String return the type
      */
-    public String getType(){
+    public String getType() {
         return type;
     }
 
     public void setType() {
         double lootRandom = Math.floor(Math.random() * 100);
-        //Si le chiffre random est comprit dans la fourchette de pourcentage d'équipements c'est un équipement
-        if (lootRandom <= getStuffPercent()){
+        // Si le chiffre random est comprit dans la fourchette de pourcentage
+        // d'équipements c'est un équipement
+        if (lootRandom <= getStuffPercent()) {
             this.type = "Stuff";
-        } 
-        //Si le chiffre random est comprit dans la fourchette de pourcentage de Ressources c'est une ressource
-        else if(lootRandom > getStuffPercent() && lootRandom < getStuffPercent() + getRessourcesPercent()){
+        }
+        // Si le chiffre random est comprit dans la fourchette de pourcentage de
+        // Ressources c'est une ressource
+        else if (lootRandom > getStuffPercent() && lootRandom < getStuffPercent() + getRessourcesPercent()) {
             this.type = "Ressource";
-        } 
-        //Si le chiffre random est supérieur à la fourchette de pourcentage d'équipements + celle de ressources, ce n'est rien
+        }
+        // Si le chiffre random est supérieur à la fourchette de pourcentage
+        // d'équipements + celle de ressources, ce n'est rien
         else {
             this.type = "Rien";
-        }    
+        }
     }
 }

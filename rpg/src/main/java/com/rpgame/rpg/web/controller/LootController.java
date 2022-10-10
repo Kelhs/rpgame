@@ -27,7 +27,7 @@ public class LootController {
     @Autowired
     private final RessourcesDAO ressourcesDAO;
 
-    public LootController(LootDAO lootDAO, StuffDAO stuffDAO, RessourcesDAO ressourcesDAO){
+    public LootController(LootDAO lootDAO, StuffDAO stuffDAO, RessourcesDAO ressourcesDAO) {
         this.lootDAO = lootDAO;
         this.stuffDAO = stuffDAO;
         this.ressourcesDAO = ressourcesDAO;
@@ -35,20 +35,20 @@ public class LootController {
 
     @GetMapping("/Loot")
     public List<Loot> getLootList() {
-       return lootDAO.findAll();
+        return lootDAO.findAll();
     }
 
     @GetMapping("Loot/{id}")
-    public Loot getLootById(int id){
+    public Loot getLootById(int id) {
         return lootDAO.findById(id);
     }
 
     @PostMapping("/Randomdrop/{luck}")
-    public Object createRandomDrop(@PathVariable int luck){
+    public Object createRandomDrop(@PathVariable int luck) {
         Loot loot = new Loot(luck);
         loot.setType();
         String lootType = loot.getType();
-        if(lootType == "Stuff"){
+        if (lootType == "Stuff") {
             lootDAO.save(loot);
             Rarity rarity = new Rarity(luck);
             String stuffRarity = rarity.getRarity();
@@ -59,7 +59,7 @@ public class LootController {
             stuff.setType();
             stuffDAO.save(stuff);
             return stuff;
-        } else if (lootType == "Ressource"){
+        } else if (lootType == "Ressource") {
             lootDAO.save(loot);
             Ressources ressource = new Ressources(loot);
             ressource.setType();
@@ -70,7 +70,7 @@ public class LootController {
                     "'categorie':" +
                     "'noLoot'" +
                     "}";
-        }  
-          
+        }
+
     }
 }
