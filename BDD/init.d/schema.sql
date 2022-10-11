@@ -1,0 +1,6 @@
+CREATE DATABASE IF NOT EXISTS rpgame;
+USE rpgame;
+
+CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'user';
+GRANT ALL PRIVILEGES ON rpgame . * TO 'user'@'%';
+
