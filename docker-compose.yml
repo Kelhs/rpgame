@@ -35,7 +35,6 @@ services:
     build:
       context: rpg
       dockerfile: Dockerfile
-    # hostname: database
     depends_on:
       - database
     ports:
