@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+  database:
+    container_name: database
+    build:
+      context: BDD
+      dockerfile: Dockerfile
+    volumes:
+      - ./BDD/data:/var/lib/mysql:z
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: rpgame
+      MYSQL_USER: rpgame
+      MYSQL_PASSWORD: rpgame
+      MYSQL_ROOT_PASSWORD: root
+  
+  phpmyadmin:
+    container_name: phpmyadmin
+    links:
+      - database
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8088:80"
+    environment:
+      PMA_HOST: database
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+  
+  api:
+    container_name: api
+    build:
+      context: rpg
+      dockerfile: Dockerfile
+    # hostname: database
+    depends_on:
+      - database
+    ports:
+      - "9090:9090"
+    environment:
+      - SERVER_PORT=9090
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/rpgame
+      - SPRING_DATASOURCE_USERNAME=rpgame
+      - SPRING_DATASOURCE_PASSWORD=rpgame
+      - SPRING_JPA_DATABASE-PLATFORM=org.hibernate.dialect.MySQL5InnoDBDialect
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.cj.jdbc.Driver
+      

@@ -4,13 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
 public class Stats {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "stats_seq_gen")
-    @SequenceGenerator(name = "stats_seq_gen", sequenceName = "STATS_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private int luck;
@@ -18,28 +19,49 @@ public class Stats {
     private int agility;
     private int intelligence;
     private int stamina;
+    private int health;
+    private int maxHealth;
+    private double speed;
+    private int defense;
+    private int attackSpeed;
+    private int exp;
+    private int level;
 
-    public Stats(){
+    public Stats() {
     }
 
-    public Stats(int agility, int intelligence, int luck, int stamina, int strength){
+    public Stats(int agility, int intelligence, int luck, int stamina, int strength, int health, int maxHealth,
+            double speed, int defense, int attackSpeed, int exp, int level) {
         this.agility = agility;
         this.intelligence = intelligence;
         this.luck = luck;
         this.stamina = stamina;
         this.strength = strength;
-    } 
+        this.health = health;
+        this.maxHealth = maxHealth;
+        this.speed = speed;
+        this.defense = defense;
+        this.attackSpeed = attackSpeed;
+        this.exp = exp;
+        this.level = level;
+    }
 
-    public Stats(int id, int agility, int intelligence, int luck, int stamina, int strength){
+    public Stats(int id, int agility, int intelligence, int luck, int stamina, int strength, int health, int maxHealth,
+            double speed, int defense, int attackSpeed, int exp, int level) {
         this.id = id;
         this.agility = agility;
         this.intelligence = intelligence;
         this.luck = luck;
         this.stamina = stamina;
         this.strength = strength;
+        this.health = health;
+        this.maxHealth = maxHealth;
+        this.speed = speed;
+        this.defense = defense;
+        this.attackSpeed = attackSpeed;
+        this.exp = exp;
+        this.level = level;
     }
-    
-
 
     /**
      * @return int return the id
@@ -118,4 +140,108 @@ public class Stats {
         this.stamina = stamina;
     }
 
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return int return the health
+     */
+    public int getHealth() {
+        return health;
+    }
+
+    /**
+     * @param health the health to set
+     */
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    /**
+     * @return int return the maxHealth
+     */
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    /**
+     * @param maxHealth the maxHealth to set
+     */
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    /**
+     * @return double return the speed
+     */
+    public double getSpeed() {
+        return speed;
+    }
+
+    /**
+     * @param speed the speed to set
+     */
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    /**
+     * @return int return the defense
+     */
+    public int getDefense() {
+        return defense;
+    }
+
+    /**
+     * @param defense the defense to set
+     */
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    /**
+     * @return int return the attackSpeed
+     */
+    public int getAttackSpeed() {
+        return attackSpeed;
+    }
+
+    /**
+     * @param attackSpeed the attackSpeed to set
+     */
+    public void setAttackSpeed(int attackSpeed) {
+        this.attackSpeed = attackSpeed;
+    }
+
+    /**
+     * @return int return the exp
+     */
+    public int getExp() {
+        return exp;
+    }
+
+    /**
+     * @param exp the exp to set
+     */
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
+
+    /**
+     * @return int return the nextLevelExp
+     */
+    public int getLevelExp() {
+        return level;
+    }
+
+    /**
+     * @param level the nextLevelExp to set
+     */
+    public void setLevelExp(int level) {
+        this.level = level;
+    }
 }

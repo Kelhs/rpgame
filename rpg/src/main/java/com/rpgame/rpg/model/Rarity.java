@@ -1,21 +1,7 @@
 package com.rpgame.rpg.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
-@Entity
 public class Rarity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "rarity_seq_gen")
-    @SequenceGenerator(name = "rarity_seq_gen", sequenceName = "RARITY_SEQ")
-    private int id;
 
-    // @OneToOne(fetch =  FetchType.LAZY)
-    // @JoinColumn(name = "stuffId")
-    // protected Stuff stuff;
     private int characterLuck = 0;
     private int legendaryPercent = 20;
     private int epicPercent = 80;
@@ -24,32 +10,36 @@ public class Rarity {
     private int commonPercent = 400;
     private int commonToUncommonRest = 0;
 
-
-    public Rarity(int characterLuck){
+    public Rarity(int characterLuck) {
         this.characterLuck = characterLuck;
     }
 
-    public int getCommonToUncommonRest(){
+    public int getCommonToUncommonRest() {
         return commonToUncommonRest;
     }
+
     /**
      * @return String return the rarity
      */
     public String getRarity() {
         double rarityRandom = Math.floor(Math.random() * 1000);
 
-        if(rarityRandom <= getLegendaryPercent()){
+        if (rarityRandom <= getLegendaryPercent()) {
             return "Legendary";
-        } else if(rarityRandom > getLegendaryPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent()){
+        } else if (rarityRandom > getLegendaryPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent()) {
             return "Epic";
-        } else if(rarityRandom > getLegendaryPercent() + getEpicPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent()){
+        } else if (rarityRandom > getLegendaryPercent() + getEpicPercent()
+                && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent()) {
             return "Rare";
-        } else if(rarityRandom > getLegendaryPercent() + getEpicPercent() + getRarePercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent()){
+        } else if (rarityRandom > getLegendaryPercent() + getEpicPercent() + getRarePercent()
+                && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent()) {
             return "Uncommon";
-        } else if(rarityRandom > getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent() + getCommonPercent()){
+        } else if (rarityRandom > getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent()
+                && rarityRandom <= getLegendaryPercent() + getEpicPercent() + getRarePercent() + getUncommonPercent()
+                        + getCommonPercent()) {
             return "Common";
         } else {
-            return "oupsi";
+            return "";
         }
     }
 
@@ -78,7 +68,7 @@ public class Rarity {
      * @return int return the uncommonPercent
      */
     public int getUncommonPercent() {
-        if(getCommonPercent() == 0){
+        if (getCommonPercent() == 0) {
             return uncommonPercent - commonToUncommonRest;
         } else {
             return uncommonPercent;
@@ -89,7 +79,7 @@ public class Rarity {
      * @return int return the commonPercent
      */
     public int getCommonPercent() {
-        if(commonPercent - (6 * characterLuck) < 0){
+        if (commonPercent - (6 * characterLuck) < 0) {
             commonToUncommonRest = (6 * characterLuck) - 400;
             return 0;
         } else {

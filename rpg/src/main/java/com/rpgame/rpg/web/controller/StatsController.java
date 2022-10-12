@@ -18,20 +18,26 @@ public class StatsController {
     @Autowired
     private final StatsDAO statsDAO;
 
-    public StatsController(StatsDAO statsDAO){
+    public StatsController(StatsDAO statsDAO) {
         this.statsDAO = statsDAO;
     }
 
+    @GetMapping("/Stats/{id}")
+    public Stats getStatsById(@PathVariable int id) {
+        return statsDAO.findById(id);
+    }
+
     @PostMapping("/Stats")
-    public void postStats(@RequestBody StatsDTO statsDTO){
+    public void postStats(@RequestBody StatsDTO statsDTO) {
         statsDAO.save(StatsDTO.StatsDTOToStats(statsDTO));
     }
 
     @PutMapping("/Stats/{playerId}")
     @ResponseBody
-    public void updateStats(@RequestBody StatsDTO statsDTO, @PathVariable int playerId){
+    public void updateStats(@RequestBody StatsDTO statsDTO, @PathVariable int playerId) {
         statsDTO.setId(playerId);
         Stats statsUpdated = StatsDTO.UpdateStatsDTOToStats(statsDTO, playerId);
         statsDAO.save(statsUpdated);
     }
+
 }
