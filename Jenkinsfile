@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'cd rpg && .mvnw compile'
+                sh 'cd rpg && ./mvnw compile'
             }
         }
         stage('DockerUp') {
