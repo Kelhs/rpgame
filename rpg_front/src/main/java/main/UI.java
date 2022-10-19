@@ -34,6 +34,8 @@ public class UI {
     DecimalFormat dFormat = new DecimalFormat("#0");
     public int commandNum = 0;
     public int titleScreenState = 0;
+    public int slotCol = 0;
+    public int slotRow = 0;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -139,7 +141,135 @@ public class UI {
                 }
             }
         }
+
+        //DRAW STATE PLAYER
+        if(gp.gameState == gp.characterState){
+            drawCharacterScreen();
+            drawInventoryScreen();
+        }
         
+    }
+    public void drawInventoryScreen(){
+        //FRAME
+        final int frameX = gp.tileSize * (gp.maxScreenCol/2 + 1);
+        final int frameY = gp.tileSize * 1;
+        final int frameWidth = gp.tileSize * 10;
+        final int frameHeight = gp.tileSize * 11;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        //SLOT
+        final int slotXStart = frameX + 20;
+        final int slotYStart = frameY + 20;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
+
+        //CURSOR
+        int cursorX = slotXStart + (gp.tileSize * slotCol);
+        int cursorY = slotYStart + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorHeight = gp.tileSize;
+
+        //DRAW CURSOR
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 20, 20);
+
+    }
+
+    public void drawCharacterScreen(){
+        //CREATE A FRAME
+        final int frameX = gp.tileSize * 1;
+        final int frameY = gp.tileSize * 1;
+        final int frameWidth = gp.tileSize * 6;
+        final int frameHeight = gp.tileSize * 11;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        //DISPLAY STATS
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(32F));
+
+        int textX = frameX + gp.tileSize;
+        int textY = frameY + gp.tileSize;
+        final int lineHeight = 48;
+        drawStats(textX, textY, lineHeight);
+        drawItemSlot();
+    }
+
+    public void drawStats(int x, int y, int lineHeight){
+        g2.drawString("Level : " + gp.player.level, x, y);
+        y += lineHeight;
+        g2.drawString("Stamina : " + gp.player.stamina, x, y);
+        y += lineHeight;
+        g2.drawString("Strength : " + gp.player.strength, x, y);
+        y += lineHeight;
+        g2.drawString("Agility : " + gp.player.agility, x, y);
+        y += lineHeight;
+        g2.drawString("Intelligence : " + gp.player.intelligence, x, y);
+        y += lineHeight;
+        g2.drawString("Speed : " + gp.player.speed, x, y);
+        y += lineHeight;
+        g2.drawString("Defense : " + gp.player.defense, x, y);
+        y += lineHeight;
+        g2.drawString("Luck : " + gp.player.luck, x, y);
+        y += lineHeight;
+        g2.drawString("Attack speed : " + gp.player.attackSpeed, x, y);
+        y += lineHeight;
+        g2.drawString("Max health : " + gp.player.maxHealth, x, y);
+        y += lineHeight;
+        g2.drawString("Current health : " + gp.player.health, x, y);
+    }
+
+    public void drawItemSlot(){
+        g2.setColor(Color.white);
+
+        BufferedImage image = null;
+
+        if(gp.player.currentHead != null){
+            image = gp.player.currentHead.image;
+        } else if(gp.player.currentHead == null){
+            image = null;
+        }
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(gp.tileSize * 2, gp.tileSize * 9, gp.tileSize, gp.tileSize, 20, 20);
+        g2.drawImage(image, gp.tileSize, gp.tileSize * 9, null);
+
+        if(gp.player.currentLegs != null){
+            image = gp.player.currentLegs.image;
+        } else if(gp.player.currentLegs == null){
+            image = null;
+        }
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(gp.tileSize * 3 + (gp.tileSize/2), gp.tileSize * 9, gp.tileSize, gp.tileSize, 20, 20);
+        g2.drawImage(image, gp.tileSize * 2, gp.tileSize * 9, null);
+
+        if(gp.player.currentBoots != null){
+            image = gp.player.currentBoots.image;
+        } else if(gp.player.currentBoots == null){
+            image = null;
+        }
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(gp.tileSize * 5, gp.tileSize * 9, gp.tileSize, gp.tileSize, 20, 20);
+        g2.drawImage(image, gp.tileSize * 5, gp.tileSize * 9, null);
+
+        if(gp.player.currentWeapon != null){
+            image = gp.player.currentWeapon.image;
+        } else if(gp.player.currentWeapon == null){
+            image = null;
+        }
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(gp.tileSize * 3 + (gp.tileSize/2), gp.tileSize * 10 + (gp.tileSize/2), gp.tileSize, gp.tileSize, 20, 20);
+        g2.drawImage(image, gp.tileSize * 5, gp.tileSize * 10 + (gp.tileSize/2), null);
+    }
+
+    public void drawSubWindow(int x, int y, int width, int height){
+        Color c = new Color(0, 0, 0, 210);
+        g2.setColor(c);
+        g2.fillRoundRect(x, y, width, height, 40, 40);
+
+        c = new Color(255, 255, 255);
+        g2.setColor(c);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x+5, y+5, width-10, height-10, 30, 30);
     }
 
     public void drawPauseScreen(Graphics2D g2){

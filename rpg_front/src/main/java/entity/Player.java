@@ -12,6 +12,7 @@ import org.json.*;
 import java.awt.Rectangle;
 
 import main.KeyHandler;
+import object.ARM_Boots;
 import object.PRO_ThrowingShield;
 import main.GamePanel;
 
@@ -78,8 +79,8 @@ public class Player extends Entity {
         numberOfImage = 14;
         attack = strength * 2;
         attackSpeed = agility * 2;
+        currentBoots = new ARM_Boots(gp, 1, "common");
         projectile = new PRO_ThrowingShield(gp);
-
     }
 
     public void update() {
@@ -134,7 +135,7 @@ public class Player extends Entity {
         }
         if (invincible) {
             invinciblePlayerCounter++;
-            if (invinciblePlayerCounter > 60) {
+            if (invinciblePlayerCounter > 30) {
                 invincible = false;
                 invinciblePlayerCounter = 0;
             }

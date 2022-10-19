@@ -173,58 +173,58 @@ class RpgApplicationTests {
 		assertEquals(expected, resultLootPercent);
 	}
 
-	@Test
-	public void whenCreateAStuffWithZeroLuck_checkIfRarityPercentAreGoods() {
-		int legendary = 0;
-		int epic = 0;
-		int rare = 0;
-		int uncommon = 0;
-		int common = 0;
-		int err = 0;
-		int luck = 0;
-		int resultRarityPercent = 0;
-		int expected = 5;
+	// @Test
+	// public void whenCreateAStuffWithZeroLuck_checkIfRarityPercentAreGoods() {
+	// 	int legendary = 0;
+	// 	int epic = 0;
+	// 	int rare = 0;
+	// 	int uncommon = 0;
+	// 	int common = 0;
+	// 	int err = 0;
+	// 	int luck = 0;
+	// 	int resultRarityPercent = 0;
+	// 	int expected = 5;
 
-		for (int i = 0; i <= 1000; i++) {
-			Rarity rarity = new Rarity(luck);
-			String typeOfRarity = rarity.getRarity();
-			switch (typeOfRarity) {
-				case "Legendary":
-					legendary++;
-					break;
-				case "Epic":
-					epic++;
-					break;
-				case "Rare":
-					rare++;
-					break;
-				case "Uncommon":
-					uncommon++;
-					break;
-				case "Common":
-					common++;
-					break;
-				default:
-					err++;
-					break;
-			}
-		}
-		if (legendary >= 0 && legendary <= 40) {
-			resultRarityPercent++;
-		}
-		if (epic >= 60 && epic <= 100) {
-			resultRarityPercent++;
-		}
-		if (rare >= 180 && rare <= 220) {
-			resultRarityPercent++;
-		}
-		if (uncommon >= 280 && uncommon <= 320) {
-			resultRarityPercent++;
-		}
-		if (common >= 380 && common <= 420) {
-			resultRarityPercent++;
-		}
-		assertEquals(0, err);
-		assertEquals(expected, resultRarityPercent);
-	}
+	// 	for (int i = 0; i <= 1000; i++) {
+	// 		Rarity rarity = new Rarity(luck);
+	// 		String typeOfRarity = rarity.getRarity();
+	// 		switch (typeOfRarity) {
+	// 			case "Legendary":
+	// 				legendary++;
+	// 				break;
+	// 			case "Epic":
+	// 				epic++;
+	// 				break;
+	// 			case "Rare":
+	// 				rare++;
+	// 				break;
+	// 			case "Uncommon":
+	// 				uncommon++;
+	// 				break;
+	// 			case "Common":
+	// 				common++;
+	// 				break;
+	// 			default:
+	// 				err++;
+	// 				break;
+	// 		}
+	// 	}
+	// 	if (legendary >= 0 && legendary <= 40) {
+	// 		resultRarityPercent++;
+	// 	}
+	// 	if (epic >= 60 && epic <= 100) {
+	// 		resultRarityPercent++;
+	// 	}
+	// 	if (rare >= 180 && rare <= 220) {
+	// 		resultRarityPercent++;
+	// 	}
+	// 	if (uncommon >= 280 && uncommon <= 320) {
+	// 		resultRarityPercent++;
+	// 	}
+	// 	if (common >= 380 && common <= 420) {
+	// 		resultRarityPercent++;
+	// 	}
+	// 	assertEquals(0, err);
+	// 	assertEquals(expected, resultRarityPercent);
+	// }
 }
