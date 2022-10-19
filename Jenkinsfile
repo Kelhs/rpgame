@@ -4,12 +4,22 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                sh 'cd rpg && .mvnw compile'
+            }
+        }
+        stage('DockerUp') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml up --build'
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh "cd rpg && ./mvnw test"
+            }
+        }
+        stage('DockerDown') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml down'
             }
         }
         stage('Deploy') {
