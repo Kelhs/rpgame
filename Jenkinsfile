@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent { 
+        docker { 
+            image 'node:14-alpine' 
+            args '-u root' 
+        } 
+    }
 
     stages {
         stage('Build') {
@@ -7,11 +12,11 @@ pipeline {
                 sh 'cd rpg && ./mvnw compile'
             }
         }
-        // stage('DockerUp') {
-        //     steps {
-        //         sh 'docker-compose -f docker-compose.yml up --build'
-        //     }
-        // }
+        stage('DockerUp') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml up --build'
+            }
+        }
         stage('Test') {
             steps {
                 sh "cd rpg && ./mvnw test"
