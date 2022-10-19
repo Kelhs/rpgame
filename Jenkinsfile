@@ -9,7 +9,7 @@ pipeline {
         }
         stage('DockerUp') {
             steps {
-                sh 'export DOCKER_HOST=127.0.0.1:2375 && docker-compose -f docker-compose.yml up --build'
+                sh 'docker-compose -f docker-compose.yml up --build'
             }
         }
         stage('Test') {
