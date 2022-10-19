@@ -1,12 +1,14 @@
 pipeline {
-    agent { 
-        docker { 
-            image 'node:14-alpine' 
-            args '-u root' 
-        } 
-    }
+    agent none
 
     stages {
+        stage("Fix permissions") {
+            agent any
+
+            steps {
+                sh "sudo chown root:jenkins /run/docker.sock"
+            }
+        }
         stage('Build') {
             steps {
                 sh 'cd rpg && ./mvnw compile'
